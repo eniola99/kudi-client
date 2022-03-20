@@ -38,6 +38,7 @@ const myChart = ({ coinHistory, currentPrice, coinName}) => {
       }
     }
   }
+  
   return (
     <>
       <Row className="chart-header">

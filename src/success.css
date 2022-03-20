@@ -1,0 +1,10 @@
+.success{
+  min-height: 90vh !important;    
+}
+.success-title{
+    text-align: center;
+    padding: 40px
+}
+.success-click{
+text-align: center
+}

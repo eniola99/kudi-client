@@ -1,17 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useGetCryptosQuery } from '../services/cryptoApi'
 import { Typography, Statistic, Row, Col, Card} from 'antd';
 import millify from "millify";
 import { Link } from 'react-router-dom';
 import Crypto from './Crypto'
 import Loader from './Loader';
-
+import News from './News'
 
 const Homepage = () => {
     
     const { data, isFetching } = useGetCryptosQuery(10)
-    const [ Lists, setLists ] = useState([])
-
 
     const globalStats = data?.data?.stats;
 
@@ -30,15 +28,14 @@ const Homepage = () => {
             <div className='home-heading-container'>
                 <Typography.Title level={5} className='home-tittle'>Top 10 Crypto</Typography.Title>
                 <Typography.Title level={5} className='show-more'><Link to='/crypto'> Show more </Link></Typography.Title>
-                
             </div>
             < Crypto simplified/>
+
             <div className='home-heading-container'>
-                <Typography.Title level={5} className='home-tittle'>Latest crypto news</Typography.Title>
-                <Typography.Title level={5} className='show-more'>Under construction</Typography.Title>
+                <Typography.Title level={5} className='home-tittle'>Latest Crypto News</Typography.Title>
+                <Typography.Title level={5} className='show-more'><Link to='/news'> Show more </Link></Typography.Title>
             </div>
-            <p>Under construction</p>
-            
+            <News simplified />
         </>
     )
 }

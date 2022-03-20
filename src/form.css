@@ -11,6 +11,7 @@
 }
 .form-style input[type=text],
 .form-style input[type=email],
+.form-style input[type=number],
 .form-style input[type=password] {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -24,8 +25,12 @@
 	-o-transition: all 0.30s ease-in-out;
 	outline: none;
 }
-.form-style input[type=text]:focus,
+.support{
+    margin-top: 20px;
+}
+.form-style input[type=text]:fo-us,
 .form-style input[type=email]:focus,
+.form-style input[type=number],
 .form-style input[type=password]:focus {
     -moz-box-shadow: 0 0 8px #88D5E9;
 	-webkit-box-shadow: 0 0 8px #88D5E9;
@@ -36,13 +41,33 @@
     background: #4691A4;
 	box-shadow:none;
 	-moz-box-shadow:none;
-	-webkit-box-shadow:none;
+    -webkit-box-shadow:none;
+    margin-left: 5px
 }
 .form-style .required{
     color: red
 }
 .form-style input {
     width: 100%
+}
+.copied{
+    display: flex;
+    align-content: center;
+    margin-top: 20px;
+    font-size: 50;
+    font-weight: bold;
+}
+.copied .eth {
+    margin-left: 20px;
+}
+.copied :hover{
+    color: #4691A4;
+}
+.copied button{
+    background: rgb(0, 21, 41);
+	padding: 8px 15px 8px 15px;
+    border: none;
+    color: #fff;
 }
 .form-style button[type=submit] {
     background: rgb(0, 21, 41);
@@ -51,8 +76,97 @@
     color: #fff;
     margin-top: 20px
 }
+.form-style2 button[type=submit] {
+    background: rgb(0, 21, 41);
+	padding: 8px 15px 8px 15px;
+	border: none;
+    color: #fff;
+    margin-top: 20px
+}
+.form-style2 label {
+    margin: 20px 0 3px 0;
+    padding: 0px;
+    display: block;
+    font-weight: bold
+}
+.form-style2 input{
+    width: 250px;
+    padding: 8px 15px 8px 15px;
+    /* border: none */
+}
+.form-style2{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding: 5px;
+    margin:0px;
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+    outline: none;
+}
+.form-delete button{
+    margin-top: 20px;
+    padding: 8px 15px 8px 15px;
+    border: none;    
+    background: rgb(255, 0, 0);
+    color: #fff
+
+}
+.settings-container{
+    /* height: 80vh; */
+}
 .form-style h2 {
     font-size: 15px;
     font-weight: normal;
     margin-top: 10px
+}
+.connect-button button{
+    font-size: 15px;
+    width: 12em;
+    height: 3em;
+    color: rgb(0, 21, 41);
+    border-left: 0.08em solid rgb(0, 21, 41);
+    margin-top: 0.8em;
+    cursor: pointer;
+}
+
+.connect-button :hover {
+    border-right: 0.08em solid
+}
+.connect-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+.connect-button button[type=submit]{
+    background: rgb(0, 21, 41);
+	padding: 8px 15px 8px 15px;
+	border: none;
+    color: #fff;
+    margin-top: 20px
+}
+.connect-button :hover{
+    background: #0071bd
+}
+
+.trade-container{
+    margin-top: 20px;
+}
+.trade-hero{
+    text-align: center;
+    background: -webkit-linear-gradient(#0071bd, #333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent
+}
+.trade-hero u{
+    color: #0071bd
+}
+.send-crypto{
+    display: flex;
+    padding-left: 25px;
+    align-items: center;
+    justify-content: center
 }

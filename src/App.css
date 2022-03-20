@@ -105,6 +105,10 @@ a:hover{
   width: 100%;
   
 }
+.bitcoin-calculator{
+  margin-top: 20px;
+  margin-bottom: 20px
+}
 .routes{
   padding: 20px;
 }
@@ -125,7 +129,10 @@ a:hover{
   width: 100%;
 }
 .logo{
-  margin:0 0 0 15px;
+  margin:10px 10px 10px 15px;
+}
+.news{
+  height: 80vh;
 }
 .logo a{
  color: white;
@@ -135,9 +142,12 @@ a:hover{
   position: absolute !important;
   right: 10px !important;
   top: 25px !important;
-  font-size: 1.2rem !important;
-  background-color: var(--bgSecondary) !important;
+  font-size: 1.3rem !important;
+  /* background-color: var(--bgSecondary) !important; */
   border: none !important;
+  width: 10%;
+  background-color: #001529;
+  color: white
 }
 
 .loader{
@@ -346,6 +356,7 @@ padding: 0px 20px;
   }
 }
 
+
 @media screen and (max-width: 500px){
   .coin-links{
       padding: 0px;
@@ -430,6 +441,7 @@ width: 70%;
 }
 .crypto-card-container{
   min-height: 65vh !important;
+  
 }
 .crypto-card{
   min-width: 250px;

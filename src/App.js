@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Layout } from 'antd'
 import Navbar from './components/Navbar';
 import Crypto from './components/Crypto';
@@ -9,15 +9,16 @@ import Homepage from './components/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Trade from './components/Trade';
+import Success from './components/Success'
+import Settings from './components/Settings'
 import CryptoDetails from './components/CryptoDetails';
-import { AuthContext } from "./context/authContext/AuthContext";
-import { useContext } from 'react'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Verified from './components/Verified';
 
 
 
 function App() {
-  const { user } = useContext(AuthContext)
-  const navigate = useNavigate()
   return (
     <>
     <div className="app">
@@ -28,6 +29,7 @@ function App() {
       <Layout>
         
         <div className='routes'>
+        <ToastContainer />        
           < Routes>
             < Route exact path="/" element={< Homepage />}></Route>
             < Route exact path="/crypto" element={< Crypto />}></Route>
@@ -36,6 +38,9 @@ function App() {
             < Route  exact path="/login"  element={< Login />}> </Route>
             < Route exact path="/signup" element={< Signup />} ></Route>
             < Route exact path="/trade" element={< Trade />}></Route>
+            < Route exact path="/success" element={< Success />}></Route>
+            < Route exact path="/settings" element={< Settings />}></Route>
+            < Route exact path="/verified" element={< Verified />}></Route>
           </ Routes>
         </div>
       </Layout>  

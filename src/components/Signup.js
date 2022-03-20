@@ -1,39 +1,40 @@
-import React, { useContext} from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Typography } from 'antd'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import '../form.css'
-import { signUpCall } from '../context/authContext/apiCall';
-import { AuthContext } from '../context/authContext/AuthContext';
-import Login from './Login'
-
+import { useNavigate } from 'react-router-dom'
+import {toast} from 'react-toastify'
 
 
 const Signup = () => {
-    const { isFetching, dispatch } = useContext(AuthContext)
-    const { user } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const formik = useFormik({
         initialValues: {
-            firstName: '', lastName: '', email: '', password: ''
+            firstName: '', lastName: '', email: '', password: '', confirmPassword: ''
         },
         validationSchema: Yup.object({
             firstName: Yup.string().required('Required'),
             lastName: Yup.string().required('Required'),
             email: Yup.string().email('Invalid email address').required('Required'),
-            password: Yup.string().min(6, 'weak password').required('Required')
+            password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
         }),
-        onSubmit: values => {
-            console.log(values)
-            signUpCall(values, dispatch)
-            
-          },
+
+        onSubmit: async (values) => {
+            try {
+                await axios.post(`https://kudiii.herokuapp.com/auth/register`, values)
+                navigate("/success")
+            } catch (err) {
+                toast.error(err.response.data)
+             }
+        }
     })
     return (
         <>
-        {user ? <Login /> : <div className='container'>
+        <div className='container'>
             <Typography.Title level={3} style={{textAlign: 'center', padding: 30, margin: 20}}>kudiCrypto Family</Typography.Title>
             <form onSubmit={formik.handleSubmit} className='form-style'>
                 <label htmlFor='firstName'>First Name</label>
@@ -52,14 +53,15 @@ const Signup = () => {
                 <input type='password' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password}/>
                 {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
 
+                
                 <div>
-                <button type='submit' disabled={isFetching}>Register</button>
-                <h2><Link to='/login'>Already as an account</Link></h2>
+                <button type='submit' >Register</button>
+                <h2><Link to='/login'>Already have an account</Link></h2>
                 </div>
             </form>
-        </div> }
+        </div>
         
-        </>
+        : </>
     )
 }
 
