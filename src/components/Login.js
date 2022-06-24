@@ -1,19 +1,24 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Typography } from 'antd'
-import { AuthContext } from '../context/authContext/AuthContext';
-import { loginCall } from '../context/authContext/apiCall';
+// import { AuthContext } from '../context/authContext/AuthContext';
+// import { loginCall } from '../context/authContext/apiCall';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Trade from "./Trade"
 import Loader from './Loader';
-import { loginStart, loginFailure, loginSuccess } from '../context/authContext/AuthAction';
+// import { loginStart, loginFailure, loginSuccess } from '../context/authContext/AuthAction';
 import {toast} from 'react-toastify'
+import { LoginUser } from "../../src/REDUX/userSlice"
+import { useSelector, useDispatch } from 'react-redux'
+
 
 
 toast.configure()
 const Login = () => {
-    const { isFetching, dispatch } = useContext(AuthContext)
-    const { user } = useContext(AuthContext)
+
+    const user = useSelector((state) => state.user)
+    const dispatch = useDispatch();
+    const [ loading, setLoading ] = useState(false)
 
     const formik = useFormik({
         initialValues: {
@@ -24,21 +29,19 @@ const Login = () => {
             password: Yup.string().min(6, 'weak password').required('Required')
         }),
         
-        onSubmit: async (values) => {
-            dispatch(loginStart())
-            try {
-                const res = await loginCall(values)
-                dispatch(loginSuccess(res.data))
-            } catch (err) {
-                toast.error(err.response.data)
-                    dispatch(loginFailure())
-                }
-            }
+        onSubmit: (values) => {
+            dispatch(LoginUser(values))
+        }
     })
-    if (isFetching) return <Loader />
+
+    // console.log(user.error)
+    // useEffect(() => {
+    //     localStorage.setItem("user", JSON.stringify(user))
+    // })
+
+
     return (
         <>
-        {!user ?
           <div className='container'>
         <Typography.Title level={3} style={{textAlign: 'center', padding: 30, margin: 20}}>Welcome Back Mate!!!</Typography.Title>
         <form className='form-style' onSubmit={formik.handleSubmit}>
@@ -50,9 +53,13 @@ const Login = () => {
             <input type='password' name='password' value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
             {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
             
-            <button type='submit'>Login</button>
+            {/* { loading ? (<Loader />) : (<button type='submit'>Login</button>)} */}
+            {/* { !loading ? (<button type='submit' >Login</button>) : <Loader/>} */}
+            {/* <button type='submit'>Login</button> */}
+            {!user.error ? <button type='submit'>Login</button> : <Loader/>}
+
         </form>
-        </div> : < Trade/> }
+        </div>
         </>
     )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Typography } from 'antd'
 import axios from 'axios'
@@ -7,10 +7,13 @@ import * as Yup from 'yup'
 import '../form.css'
 import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify'
+import Loader from './Loader';
+
 
 
 const Signup = () => {
     const navigate = useNavigate()
+    const [ loading, setLoading ] = useState(false)
 
     const formik = useFormik({
         initialValues: {
@@ -25,10 +28,12 @@ const Signup = () => {
 
         onSubmit: async (values) => {
             try {
-                await axios.post(`https://kudiii.herokuapp.com/auth/register`, values)
+                await axios.post(`http://localhost:5000/auth/register`, values)               //(`https://kudiii.herokuapp.com/auth/register`, values)
+                setLoading(true)
                 navigate("/success")
             } catch (err) {
                 toast.error(err.response.data)
+                setLoading(false)
              }
         }
     })
@@ -53,11 +58,14 @@ const Signup = () => {
                 <input type='password' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password}/>
                 {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
 
-                
-                <div>
-                <button type='submit' >Register</button>
-                <h2><Link to='/login'>Already have an account</Link></h2>
-                </div>
+                { loading ? (< Loader />) : 
+                (
+                    <>
+                        <button type='submit' >Register</button>
+                        <h2><Link to='/login'>Already have an account</Link></h2>
+                    </>
+                )
+                }
             </form>
         </div>
         

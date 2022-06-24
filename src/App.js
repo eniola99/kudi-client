@@ -27,7 +27,6 @@ function App() {
       </div>
       <div className='main'>
       <Layout>
-        
         <div className='routes'>
         <ToastContainer />        
           < Routes>

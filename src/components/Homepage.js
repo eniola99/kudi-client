@@ -1,6 +1,6 @@
 import React from 'react'
 import { useGetCryptosQuery } from '../services/cryptoApi'
-import { Typography, Statistic, Row, Col, Card} from 'antd';
+import { Typography, Statistic, Row, Col } from 'antd';
 import millify from "millify";
 import { Link } from 'react-router-dom';
 import Crypto from './Crypto'
