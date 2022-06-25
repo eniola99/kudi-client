@@ -1,46 +1,40 @@
-import React,  { useContext } from 'react'
+import React from 'react'
 import { Typography } from 'antd';
 import '../form.css'
-import { AuthContext } from '../context/authContext/AuthContext';
-import { logoutCall } from '../context/authContext/apiCall';
-import Homepage from './Homepage';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { UpdateUser, LogoutCall } from '../REDUX/userSlice';
 
 
 const { Title } = Typography
 const Settings = () => {
-    const {  dispatch } = useContext(AuthContext)
-    const { user } = useContext(AuthContext)
+    const user = useSelector((state) => state.user.userInfo)
+    const dispatch = useDispatch()
 
+   
     const formik = useFormik({
         initialValues: {
-            email: '',  password: ''
+            email: user.info.email,  password: ''
         },
         validationSchema: Yup.object({
             email: Yup.string().email('Invalid email address').required('Required'),
             password: Yup.string().min(6, 'weak password').required('Required')
         }),
         onSubmit: async (values) => {
-            try {
-                await axios.put(`https://kudiii.herokuapp.com/auth/user/${user.user._id}`, values, {
-                    headers: {
-                        "token": `bearer ${user.generateToken}`
-                    }
-                })
-            } catch (err) { }
+            // dispatch(UpdateUser(values))
         }
     })
+
+    // console.log(user.generateToken)
     
     const logoutHandler = (e) => {
         e.preventDefault()
-        logoutCall(dispatch)
+        dispatch(LogoutCall())
     }
    
     return (
         <>
-        {user ?
         <div className='settings-container'>
             <p>under construction</p>
 
@@ -65,7 +59,6 @@ const Settings = () => {
                
             </div>
         </div>
-        : < Homepage />}
         </>
     )
 }

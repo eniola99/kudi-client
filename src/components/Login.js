@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Typography } from 'antd'
-// import { AuthContext } from '../context/authContext/AuthContext';
-// import { loginCall } from '../context/authContext/apiCall';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Trade from "./Trade"
 import Loader from './Loader';
-// import { loginStart, loginFailure, loginSuccess } from '../context/authContext/AuthAction';
 import {toast} from 'react-toastify'
 import { LoginUser } from "../../src/REDUX/userSlice"
 import { useSelector, useDispatch } from 'react-redux'
@@ -16,9 +13,8 @@ import { useSelector, useDispatch } from 'react-redux'
 toast.configure()
 const Login = () => {
 
-    const user = useSelector((state) => state.user)
+    const { pending, error } = useSelector((state) => state.user)
     const dispatch = useDispatch();
-    const [ loading, setLoading ] = useState(false)
 
     const formik = useFormik({
         initialValues: {
@@ -33,11 +29,7 @@ const Login = () => {
             dispatch(LoginUser(values))
         }
     })
-
-    // console.log(user.error)
-    // useEffect(() => {
-    //     localStorage.setItem("user", JSON.stringify(user))
-    // })
+    if(pending === true) return <Loader/>
 
 
     return (
@@ -52,11 +44,8 @@ const Login = () => {
             <label htmlFor='password'>Password</label>
             <input type='password' name='password' value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
             {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
-            
-            {/* { loading ? (<Loader />) : (<button type='submit'>Login</button>)} */}
-            {/* { !loading ? (<button type='submit' >Login</button>) : <Loader/>} */}
-            {/* <button type='submit'>Login</button> */}
-            {!user.error ? <button type='submit'>Login</button> : <Loader/>}
+
+            <button type='submit'>Login</button>
 
         </form>
         </div>

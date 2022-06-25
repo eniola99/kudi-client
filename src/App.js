@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from 'antd'
 import Navbar from './components/Navbar';
 import Crypto from './components/Crypto';
@@ -15,12 +15,14 @@ import CryptoDetails from './components/CryptoDetails';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verified from './components/Verified';
-
+import { useSelector } from "react-redux";
 
 
 function App() {
+  const user = useSelector((state) => state.user.userInfo)
   return (
     <>
+    {console.log(user)}
     <div className="app">
       <div className='navbar'>
         < Navbar />
@@ -34,11 +36,13 @@ function App() {
             < Route exact path="/crypto" element={< Crypto />}></Route>
             < Route exact path="crypto/:coinId" element={< CryptoDetails />}></Route>
             < Route exact path="/news" element={< News />}></Route>
-            < Route  exact path="/login"  element={< Login />}> </Route>
-            < Route exact path="/signup" element={< Signup />} ></Route>
-            < Route exact path="/trade" element={< Trade />}></Route>
+            
+            < Route  exact path="/login"  element={user ? <Navigate replace to="/trade" /> : < Login />}> </Route>
+            < Route exact path="/signup" element={ < Signup />} > </Route>
+            
+            < Route exact path="/trade" element={user ? < Trade /> : <Homepage />}></Route>
             < Route exact path="/success" element={< Success />}></Route>
-            < Route exact path="/settings" element={< Settings />}></Route>
+            < Route exact path="/settings" element={user ? < Settings /> : <Homepage />}></Route>
             < Route exact path="/verified" element={< Verified />}></Route>
           </ Routes>
         </div>

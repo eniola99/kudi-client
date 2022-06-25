@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
-import store from '../src/app/store'
+import {store, persistor} from '../src/app/store'
 import { TransactionsProvider } from './SmartContractContext/TransactionContext'
-
+import { PersistGate } from 'redux-persist/integration/react'
 import './index.css';
 import App from './App';
 import 'antd/dist/antd.css'
@@ -14,8 +14,10 @@ ReactDOM.render(
   <TransactionsProvider>
     <Router>
         <Provider store={store}>
-          <App />
-          </Provider>
+          <PersistGate loading={null} persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
     </Router>
     </TransactionsProvider>,
   document.getElementById('root')
