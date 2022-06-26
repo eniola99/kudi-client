@@ -15,14 +15,33 @@ import CryptoDetails from './components/CryptoDetails';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verified from './components/Verified';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch,} from "react-redux";
+import { LogoutCall } from '../src/REDUX/userSlice'
+import { useEffect } from 'react';
 
 
 function App() {
   const user = useSelector((state) => state.user.userInfo)
-  return (
+  const dispatch = useDispatch()
+
+  const logout = () => {
+    dispatch(LogoutCall())
+  }
+
+  // useEffect(() => {
+  //   const token = user?.generateToken;
+
+  //   //jwt check if expire token
+  //   if(token) {
+  //     const decodedToken = decode(token)
+
+  //     if(decodedToken.exp*1000 < newDate().getTime())
+  //     logout()
+  //   }
+  // })
+
+return (
     <>
-    {console.log(user)}
     <div className="app">
       <div className='navbar'>
         < Navbar />
