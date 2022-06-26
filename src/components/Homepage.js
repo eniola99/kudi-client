@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import Crypto from './Crypto'
 import Loader from './Loader';
 import News from './News'
+import Typed from 'react-typed'
+import Typography2 from '@mui/material/Typography';
+
 
 const Homepage = () => {
     
@@ -18,12 +21,15 @@ const Homepage = () => {
     
     return (
         <>
-            <Typography.Title level={5} className='heading'>Global Crypto Stats</Typography.Title>
+            <Typography2 variant="h5" sx={{color: "rgb(0, 21, 41)", marginBottom: "50px"}}> <Typed
+            strings={["GET LATEST CRYPTO UPDATES.", "READ LATEST CRYPTO NEWS.", "BITCOIN WALLET.", "KudiPay COMING SOON."]}
+            typeSpeed={65} backSpeed={65} loop ></Typed> </Typography2>
+            <Typography.Title level={4} className='heading'>Global Crypto Stats</Typography.Title>
             <Row>
-                <Col span={12}><Statistic title='Total Crypto' value={millify(globalStats.total)} /></Col>
-                <Col span={12}><Statistic title='Total Market Cap' value={millify(globalStats.totalMarketCap)} $/></Col>
-                <Col span={12}><Statistic title='Total Exchanges' value={millify(globalStats.totalExchanges)} /></Col> 
-                <Col span={12}><Statistic title='Total 24hr volume' value={millify(globalStats.total24hVolume)} /></Col>              
+                <Col span={12}> <strong> <Statistic title='Total Crypto' value={millify(globalStats.total)}/> </strong> </Col>
+                <Col span={12}> <strong><Statistic title='Total Market Cap' value={millify(globalStats.totalMarketCap)} $/> </strong></Col>
+                <Col span={12}> <strong><Statistic title='Total Exchanges' value={millify(globalStats.totalExchanges)} /> </strong></Col> 
+                <Col span={12}> <strong><Statistic title='Total 24hr volume' value={millify(globalStats.total24hVolume)} /> </strong></Col>              
             </Row>
             <div className='home-heading-container'>
                 <Typography.Title level={5} className='home-tittle'>Top 10 Crypto</Typography.Title>

@@ -34,7 +34,7 @@ const Login = () => {
 
     return (
         <>
-          <div className='container'>
+          <div className='container' style={{height: '80vh'}}>
         <Typography.Title level={3} style={{textAlign: 'center', padding: 30, margin: 20}}>Welcome Back Mate!!!</Typography.Title>
         <form className='form-style' onSubmit={formik.handleSubmit}>
             <label htmlFor='email'>Email</label>

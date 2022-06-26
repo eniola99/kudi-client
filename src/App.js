@@ -17,16 +17,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import Verified from './components/Verified';
 import { useSelector, useDispatch,} from "react-redux";
 import { LogoutCall } from '../src/REDUX/userSlice'
-import { useEffect } from 'react';
 
 
 function App() {
   const user = useSelector((state) => state.user.userInfo)
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
-  const logout = () => {
-    dispatch(LogoutCall())
-  }
+  // const logout = () => {
+  //   dispatch(LogoutCall())
+  // }
 
   // useEffect(() => {
   //   const token = user?.generateToken;
