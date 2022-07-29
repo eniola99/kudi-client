@@ -6,7 +6,7 @@ import {toast} from 'react-toastify'
 
 export const LoginUser = createAsyncThunk("login/user", async (user) => {
     try {
-        const response = await axios.post(`http://localhost:5000/auth/login`, user)
+        const response = await axios.post(`https://kudiii.herokuapp.com/auth/login`, user)
         return response.data
     } catch (err) {
         toast.error(err.response.data)
