@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Typography } from 'antd'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import Trade from "./Trade"
 import Loader from './Loader';
 import {toast} from 'react-toastify'
 import { LoginUser } from "../../src/REDUX/userSlice"
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useSelector, useDispatch } from 'react-redux'
 
 
@@ -15,6 +16,7 @@ const Login = () => {
 
     const { pending, error } = useSelector((state) => state.user)
     const dispatch = useDispatch();
+    const [values, setValues] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -31,6 +33,9 @@ const Login = () => {
     })
     if(pending === true) return <Loader/>
 
+    const handleShowPassword = () => {
+        setValues(!values)
+    }
 
     return (
         <>
@@ -42,7 +47,15 @@ const Login = () => {
             {formik.touched.firstName && formik.errors.firstName ? (<div className='required'>{formik.errors.firstName}</div>) : null}
             
             <label htmlFor='password'>Password</label>
-            <input type='password' name='password' value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange} />
+            <div style={{display: 'flex', flexDirection: 'colunm', justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+            <input type={ values ? 'text' : 'password'} name='password' value={formik.values.password} onBlur={formik.handleBlur} onChange={formik.handleChange}/>
+            {
+                !values ?
+                <VisibilityIcon style={{position: 'absolute', right: '10px', cursor: "pointer", width: '20px'}} onClick={handleShowPassword}/>
+                :
+                <VisibilityOffIcon style={{position: 'absolute', right: '10px', cursor: "pointer", width: '20px'}} onClick={handleShowPassword}/>
+            }
+            </div>
             {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
 
             <button type='submit'>Login</button>

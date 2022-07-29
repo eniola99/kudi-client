@@ -7,13 +7,18 @@ import * as Yup from 'yup'
 import '../form.css'
 import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify'
-import Loader from './Loader';
+import Loader from './Loader'
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+
 
 
 
 const Signup = () => {
     const navigate = useNavigate()
     const [ loading, setLoading ] = useState(false)
+    const [values, setValues] = useState(false);
+
 
     const formik = useFormik({
         initialValues: {
@@ -37,6 +42,10 @@ const Signup = () => {
              }
         }
     })
+    const handleShowPassword = () => {
+        setValues(!values)
+    }
+
     return (
         <>
         <div className='container'>
@@ -59,7 +68,15 @@ const Signup = () => {
                 {formik.touched.email && formik.errors.email ? (<div className='required'>{formik.errors.email}</div>) : null}
 
                 <label htmlFor='password'>Password</label>
-                <input type='password' name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password}/>
+                <div style={{display: 'flex', flexDirection: 'colunm', justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+                <input type={ values ? 'text' : 'password'} name='password' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.password}/>
+                {
+                !values ?
+                <VisibilityIcon style={{position: 'absolute', right: '10px', cursor: "pointer", width: '20px'}} onClick={handleShowPassword}/>
+                :
+                <VisibilityOffIcon style={{position: 'absolute', right: '10px', cursor: "pointer", width: '20px'}} onClick={handleShowPassword}/>
+                }                
+                </div>
                 {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
 
                 { loading ? (< Loader />) : 
