@@ -14,6 +14,14 @@ import {toast} from 'react-toastify'
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import moment from 'moment'
 
 //css
 import '../form.css'
@@ -21,6 +29,7 @@ import '../form.css'
 const Trade = () => {
     const [ balance, setBalance ] = useState('')
     const [ tx, setTx ] = useState('')
+    const [ txId, setTxId ] = useState([])
     const [ totalReceive, setTotalReceive ] = useState('')
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -44,19 +53,15 @@ const Trade = () => {
         } 
     }
 
-    // const walletTransaction = async() => {
-    //     try {
-    //         const response = await axios.get(`https://blockchain.info/rawaddr/164YfkMnksHBJtRQ3XdVQkikMxxykRQvTy`)
-    //         console.log(response.data)
-    //     } catch (err) {
-    //         toast.error(err.response.data)
-    //     }
-    // }
+    const walletTransaction = async() => {
+            const response = await axios.get(`https://sochain.com/api/v2/get_tx_spent/BTC/${add}`)
+            setTxId(response.data.data.txs)
+        }
 
     useEffect(() => {
         walletBalance()
-        // walletTransaction()
-    })
+        walletTransaction()
+    }, [])
 
     const checkPin = () => {
         if(user.info.pin === null) {
@@ -66,7 +71,6 @@ const Trade = () => {
             toast.success('done')
         }
     }
-    
 
     const style = {
         position: 'absolute',
@@ -100,9 +104,9 @@ const Trade = () => {
     return (
         <>
         <div >
-         <Typography variant="h6" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}> Hi, {user.info.username} </Typography>
+         <Typography variant="h6" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}> Hi, {user.info.firstName} </Typography>
          <Masonry columns={2} spacing={4}>
-            <Card sx={{ minWidth: 375, minHeight: '200px' }}>
+            <Card sx={{ minWidth: 375 }}>
                 <CardContent>
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Total Value(BTC):</Typography>
                     <Typography variant="subtitle2" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}>{user.info.wallet_publicAddress} </Typography>
@@ -150,27 +154,67 @@ const Trade = () => {
                     </Stack>
                 </CardContent>
             </Card>
-            <Card sx={{ minWidth: 375, minHeight: "200px"}}>
+            <Card sx={{ minWidth: 375, minHeight: 300}}>
                 <CardContent>
 
                     {/* GET RECENT TRANSACTION HISTORY */}
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >RECENT TRANSACTION:</Typography>
                     <Typography variant="subtitle2" component="div">This address has transacted {tx} times on Bitcoin blockchain. It has received a total of {totalReceive} BTC. The current value  of this address is {balance} BTC</Typography>
-
+                    {txId.length < 1 ? 
+                     <Typography variant="h6" component="div" gutterBottom sx={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>NO TRANSACTION ON THIS ADDRESS</Typography> :
+                        <TableContainer component={Paper} sx={{marginTop: '20px'}}>
+                            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                                <TableHead>
+                                <TableRow>
+                                    <TableCell>Txh Hash</TableCell>
+                                    <TableCell>Block</TableCell>
+                                    <TableCell>Value</TableCell>
+                                    {/* <TableCell align="right">Age</TableCell> */}
+                                </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                {txId.slice(-4).map((row) => (
+                                    <TableRow
+                                    key={row.txid}
+                                    >
+                                    <TableCell component="th" scope="row">
+                                    <a href={`https://www.blockchain.com/btc/tx/${row.txid}`} target="_blank" rel="noreferrer">
+                                        {row.txid.slice(0,30)}
+                                    </a>
+                                    </TableCell>
+                                    <TableCell>{row.confirmations}</TableCell>
+                                    <TableCell>${Math.floor((row.value * 0.0002331) * 100000000)}</TableCell>
+                                    {/* <TableCell align="right">{moment(row.time).fromNow()}</TableCell> */}
+                                    </TableRow>
+                                ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    }
                     
                 </CardContent>
             </Card>
-            <Card sx={{ minWidth: 275 }}>
+            <Card sx={{ minWidth: 375, minHeight: 300 }}>
             <CardContent>
-                    this is hold all the transaction history
-                    
-                </CardContent>
+            <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >ACTIVE TRADERS</Typography>
+            <Typography variant="subtitle2" component="div" gutterBottom>
+                 Active Traders will appear here with a button to intiate trade
+            </Typography>
+            <Typography variant="caption text" component="div" gutterBottom>
+                coming soon...
+            </Typography>
+            </CardContent>
             </Card>
-            <Card sx={{ minWidth: 275 }}>
+            <Card sx={{ minWidth: 375, minHeight: 300 }}>
             <CardContent>
-                    this is hold all the transaction history
-                    
-                </CardContent>
+            <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >RECENT TRADE'S</Typography>
+            <Typography variant="subtitle2" component="div" gutterBottom>
+                 Recent trades with online active traders will appear here
+            </Typography>
+            <Typography variant="caption text" component="div" gutterBottom>
+                coming soon...
+            </Typography>
+            </CardContent>
             </Card>
         </Masonry>
         </div>
