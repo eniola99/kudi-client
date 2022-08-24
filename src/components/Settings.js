@@ -6,6 +6,20 @@ import * as Yup from 'yup'
 import { useSelector, useDispatch } from 'react-redux'
 import { UpdateUser, LogoutCall } from '../REDUX/userSlice';
 
+//img
+import profile from '../../src/profile.jpg'
+
+//MUI
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
+import Typography2 from '@mui/material/Typography';
+import Masonry from '@mui/lab/Masonry';
+
+
+
+
 
 const { Title } = Typography
 const Settings = () => {
@@ -25,8 +39,6 @@ const Settings = () => {
             // dispatch(UpdateUser(values))
         }
     })
-
-    // console.log(user.generateToken)
     
     const logoutHandler = (e) => {
         e.preventDefault()
@@ -35,11 +47,34 @@ const Settings = () => {
    
     return (
         <>
-        <div className='settings-container'>
-            <p>under construction</p>
+            <div><Title level={4}>Hello, {user.info.firstName} :)</Title></div>
 
-            <div><Title level={4}>Update your account {user.info.firstName} :)</Title></div>
-            <Title level={5} style={{paddingTop: "20px"}} >update account details</Title>
+        <Masonry columns={2} spacing={4}>
+            <Card>
+                <CardContent sx={{ flexGrow: 1 }}>
+                    <Grid container justifyContent="center" alignItems='center' direction="row">
+                    <Grid item xs={4}>
+                        <Avatar  sx={{ width: 100, height: 100 }}>NQ</Avatar>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Typography2 variant="subtitle2" component="div" gutterBottom > First Name: {user.info.firstName} </Typography2>
+                        <Typography2 variant="subtitle2" component="div" gutterBottom > Last Name: {user.info.lastName} </Typography2>                        
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Typography2 variant="caption text" component="div" gutterBottom > Toogle visibility</Typography2>
+                        {/* <Typography2 variant="subtitle2" component="div" gutterBottom > email: {user.info.email} </Typography2> */}
+                    </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardContent sx={{ flexGrow: 1}}>
+                    <Typography2 variant='h6' component='div'> Personal Information</Typography2>
+                </CardContent>
+            </Card>
+
+        </Masonry>
             <form onSubmit={formik.handleSubmit} className='form-style2'>
 
                 <label htmlFor='email'>Email</label>
@@ -58,7 +93,7 @@ const Settings = () => {
                 <button type='submit' onClick={logoutHandler}>Logout</button>
                
             </div>
-        </div>
+
         </>
     )
 }

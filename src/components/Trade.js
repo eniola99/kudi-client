@@ -169,7 +169,7 @@ const Trade = () => {
                                     <TableCell>Txh Hash</TableCell>
                                     <TableCell>Block</TableCell>
                                     <TableCell>Value</TableCell>
-                                    {/* <TableCell align="right">Age</TableCell> */}
+                                    <TableCell align="left">Age</TableCell>
                                 </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -184,7 +184,7 @@ const Trade = () => {
                                     </TableCell>
                                     <TableCell>{row.confirmations}</TableCell>
                                     <TableCell>${Math.floor((row.value * 0.0002331) * 100000000)}</TableCell>
-                                    {/* <TableCell align="right">{moment(row.time).fromNow()}</TableCell> */}
+                                    <TableCell align="left">{ moment(row.time * 1000).format("DD MMM hh:mm a")}</TableCell>
                                     </TableRow>
                                 ))}
                                 </TableBody>
