@@ -76,6 +76,13 @@
     color: #fff;
     margin-top: 20px
 }
+
+.form-style2 label {
+    margin: 20px 0 3px 0;
+    padding: 0px;
+    display: block;
+    font-weight: bold
+}
 .form-style2 button[type=submit] {
     background: rgb(0, 21, 41);
 	padding: 8px 15px 8px 15px;
@@ -83,12 +90,8 @@
     color: #fff;
     margin-top: 20px
 }
-.form-style2 label {
-    margin: 20px 0 3px 0;
-    padding: 0px;
-    display: block;
-    font-weight: bold
-}
+
+
 .form-style2 input{
     width: 250px;
     padding: 8px 15px 8px 15px;
@@ -107,9 +110,11 @@
     outline: none;
 }
 .form-delete button{
-    margin-top: 20px;
+    
+    margin-top: 8px;
     padding: 8px 15px 8px 15px;
-    border: none;    
+    border: none;
+    border-radius: 10px;  
     background: rgb(255, 0, 0);
     color: #fff
 

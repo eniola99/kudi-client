@@ -33,7 +33,7 @@ const Signup = () => {
 
         onSubmit: async (values) => {
             try {
-                await axios.post(`http://localhost:5000/auth/register`, values)    //(`https://kudiii.herokuapp.com/auth/register`, values)
+                await axios.post(`http://localhost:8800/auth/register`, values)    //(`https://kudiii.herokuapp.com/auth/register`, values)
                 setLoading(true)
                 navigate("/success")
             } catch (err) {

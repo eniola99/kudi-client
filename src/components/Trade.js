@@ -22,6 +22,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import moment from 'moment'
+import Alert from '@mui/material/Alert';
 
 //css
 import '../form.css'
@@ -100,10 +101,10 @@ const Trade = () => {
      logout()
 
 
-     
     return (
         <>
         <div >
+        {!user.info.Pin ? <Alert severity='error'> Update your account status to be able to use the service</Alert> : null}
          <Typography variant="h6" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}> Hi, {user.info.firstName} </Typography>
          <Masonry columns={2} spacing={4}>
             <Card sx={{ minWidth: 375 }}>
