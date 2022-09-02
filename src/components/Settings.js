@@ -5,9 +5,8 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useSelector, useDispatch } from 'react-redux'
 import { UpdateUser, LogoutCall } from '../REDUX/userSlice';
+import Loader from '../../src/components/Loader'
 
-//img
-// import profile from '../../src/profile.jpg'
 
 //css
 import '../../src/form.css'
@@ -25,31 +24,29 @@ import Alert from '@mui/material/Alert';
 
 
 
-
-
-
 const { Title } = Typography
 const Settings = () => {
     const user = useSelector((state) => state.user.userInfo)
+    const { pending, error } = useSelector((state) => state.user)
+
     const dispatch = useDispatch()
 
    const [ online, setOnline ] = useState(false)
     const formik = useFormik({
         initialValues: {
-            BankName: '', AccountNumber: '', PhoneNumber: '', Address: '', Pin: '', Rate: '', Terms: '', email: user.info.email
+            Bank: user.info.Bank, Account: user.info.Account, Phone: user.info.Phone, Address: user.info.Address, Pin: user.info.Pin, Rate: user.info.Rate, Terms: user.info.Terms,
         },
         validationSchema: Yup.object({
-            BankName: Yup.string().min(3, 'invalid bank account').required('required'),
-            AccountNumber: Yup.string().max(10, 'invalid bank account').required('Required'),
-            PhoneNumber: Yup.string().max(13, 'invalid phone number').required('required'),
-            Address: Yup.string().required('required'),
+            Bank: Yup.string().min(3, 'invalid bank account'),
+            Account: Yup.string().max(10, 'invalid bank account'),
+            Phone: Yup.string().max(13, 'invalid phone number'),
+            Address: Yup.string(),
             Rate: Yup.string().min(3, 'invalid').required('required'),
             Pin: Yup.string().max(4, 'pin is longer than four digit'),
             Terms: Yup.string().min(5, 'invalid'),
-            email: Yup.string().email('Invalid email address').required('Required'),
         }),
         onSubmit: async (values) => {
-            // dispatch(UpdateUser(values))
+           dispatch(UpdateUser(values))
         }
     })
     
@@ -61,12 +58,10 @@ const Settings = () => {
     const onlineHandler = () => {
         setOnline(true)
     }
+    if(pending === true) return <Loader/>
 
-   if(online == true) {
-    console.log('online')
-   } else{
-    console.log('offline')
-   }
+
+
     return (
         <>
         {!user.info.Pin ? <Alert severity='error'> Update your account status to be able to use the service</Alert> : null}
@@ -86,7 +81,6 @@ const Settings = () => {
                     <Grid item xs={4}>
                         <Typography2 variant="caption text" component="div" gutterBottom sx={{marginBottom: '10px'}} >{user.info.Pin ? <Typography2 variant='subtitle2'> <Switch size='large' onClick={onlineHandler}/><strong>online</strong></Typography2> : null}</Typography2>
                         <Typography2 variant="caption text" component="div" gutterBottom > <Chip variant="outlined" color='success' size="small" label={user.info.is_verified && user.info.Pin ? <Typography2 variant='subtitle2'>verified</Typography2> : <Typography2>not verified</Typography2>} /></Typography2>
-                        {/* <Typography2 variant="subtitle2" component="div" gutterBottom > email: {user.info.email} </Typography2> */}
                     </Grid>
                     </Grid>
                 </CardContent>
@@ -118,16 +112,16 @@ const Settings = () => {
                     <form onSubmit={formik.handleSubmit} className='form-style'>
 
                     <label htmlFor='Bank'>Bank Name</label>
-                    <input type='text' name='BankName' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.BankName} />
-                    {formik.touched.BankName && formik.errors.BankName ? (<div className='required'>{formik.errors.BankName}</div>) : null}
+                    <input type='text' name='Bank' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Bank} />
+                    {formik.touched.Bank && formik.errors.Bank ? (<div className='required'>{formik.errors.Bank}</div>) : null}
 
                     <label htmlFor='Account Number'>Bank Account</label>
-                    <input type='number' name='AccountNumber' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.AccountNumber} />
-                    {formik.touched.AccountNumber && formik.errors.AccountNumber ? (<div className='required'>{formik.errors.AccountNumber}</div>) : null}
+                    <input type='number' name='Account' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Account} />
+                    {formik.touched.Account && formik.errors.Account ? (<div className='required'>{formik.errors.Account}</div>) : null}
 
                     <label htmlFor='Phone Number'>Phone Number</label>
-                    <input type='number' name='PhoneNumber' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.PhoneNumber} />
-                    {formik.touched.PhoneNumber && formik.errors.PhoneNumber ? (<div className='required'>{formik.errors.PhoneNumber}</div>) : null}
+                    <input type='number' name='Phone' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Phone} />
+                    {formik.touched.Phone && formik.errors.Phone ? (<div className='required'>{formik.errors.Phone}</div>) : null}
 
                     <label htmlFor='Address'>Address</label>
                     <input type='text' name='Address' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Address} />

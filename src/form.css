@@ -114,7 +114,8 @@
     margin-top: 8px;
     padding: 8px 15px 8px 15px;
     border: none;
-    border-radius: 10px;  
+    border-radius: 10px;
+    box-shadow: 1px 1px #4691A4;
     background: rgb(255, 0, 0);
     color: #fff
 

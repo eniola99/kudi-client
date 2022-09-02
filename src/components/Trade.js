@@ -23,6 +23,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import moment from 'moment'
 import Alert from '@mui/material/Alert';
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+
 
 //css
 import '../form.css'
@@ -40,8 +44,21 @@ const Trade = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const userPin = user.info.pin
+    const userPin = user.info.Pin
     const add = user.info.wallet_publicAddress
+
+    const formik = useFormik({
+        initialValues: {
+            Address: "", Network: "BTC", Amount: ""
+        },
+        validationSchema: Yup.object({
+
+        }),
+        onSubmit: async (values) => {
+           console.log(values)
+        }
+    })
+
 
     const walletBalance = async() => {
         try {
@@ -65,7 +82,7 @@ const Trade = () => {
     }, [])
 
     const checkPin = () => {
-        if(user.info.pin === null) {
+        if(user.info.Pin === null) {
             toast.info('set your pin before you can proceed')
         navigate('/settings')
         }else{
@@ -93,7 +110,8 @@ const Trade = () => {
         navigate("/")        
     }
 
-    const token = user.generateToken
+    const generate = localStorage.getItem("userToken")
+    const token = generate
 
      //jwt if jwt token as expire
      const decodeToken = decode(token)
@@ -129,26 +147,27 @@ const Trade = () => {
                         >
                         <Box sx={style}>
                         <div>
-                            <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Send BTC
-                            </Typography>
+                            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{marginLeft: '20px'}}><strong>SEND BTC</strong></Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2, marginLeft: '20px' }}><strong>Send BTC to crypto Address</strong></Typography>
 
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                                Send BTC to crypto address
-                            </Typography>
+                            <form onSubmit={formik.handleSubmit} className='form-style'>
 
-                            <Typography variant='subtitle2' sx={{marginTop: '20px'}} >Address</Typography>
-                            <input type='text' name='address' placeholder='Long press to paste'></input>
+                                <label htmlFor='Address'>Address</label>
+                                <input type='text' name='Address' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Address} />
+                                {formik.touched.Address && formik.errors.Address ? (<div className='required'>{formik.errors.Address}</div>) : null}
 
-                            <Typography variant='subtitle2' sx={{marginTop: '20px'}}>Network</Typography>
-                            <input type='text' name='network' placeholder='Bitcoin'></input>
+                                <label htmlFor='Network'>Network</label>
+                                <input type='text' name='Network' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Network} />
+                                {formik.touched.Network && formik.errors.Network ? (<div className='required'>{formik.errors.Network}</div>) : null}
 
-                            <Typography variant='subtitle2' sx={{marginTop: '20px'}}>Amount</Typography>
-                            <input type='number' name='amount' placeholder='Bitcoin' style={{boxSizing: 'border-box', width: "100%", padding: "7px", border: '1px solid #BEBEBE'}}></input>
+                                <label htmlFor='Amount'>Amount</label>
+                                <input type='number' name='Amount' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Amount} />
+                                {formik.touched.Amount && formik.errors.Amount ? (<div className='required'>{formik.errors.Amount}</div>) : null}
 
-                            <div >
-                                <Button variant="contained" color="error" sx={{marginTop: '20px'}} onClick={checkPin} disabled>Withdraw</Button>
-                            </div>
+                                <div className='form-delete'>
+                                <button type='submit'><strong>WITHDRAW</strong></button>
+                                </div>
+                            </form>
                         </div>
                         </Box>
                         </Modal>

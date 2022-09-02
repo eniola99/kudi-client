@@ -6,7 +6,9 @@ import {toast} from 'react-toastify'
 
 export const LoginUser = createAsyncThunk("login/user", async (user) => {
     try {
-        const response = await axios.post(`http://localhost:8800/auth/login`, user)//(`https://kudiii.herokuapp.com/auth/login`, user)
+        const response = await axios.post(`https://kudiii.herokuapp.com/auth/login`, user)
+        localStorage.setItem("info", response.data.info._id)
+        localStorage.setItem('userToken', response.data.generateToken)
         return response.data
     } catch (err) {
         toast.error(err.response.data)
@@ -14,19 +16,22 @@ export const LoginUser = createAsyncThunk("login/user", async (user) => {
 
 })
 
-// export const UpdateUser = createAsyncThunk("update/user", async (user) => {
-//     try {
-//         const response = await axios.put(`http://localhost:5000/auth/user/${user.info._id}`, user, {
-//             headers: {
-//                 "token": `Bearer ${user.generateToken}`,
-//                 "Content-Type": "application/json; charset=utf-8",
-//             }
-//         })
-//         return response.data
-//     } catch (err) {
-//         toast.error(err.response.data)
-//     }
-// })
+export const UpdateUser = createAsyncThunk("update/user", async (user) => {
+    const userId = localStorage.getItem('info')
+    const generate = localStorage.getItem("userToken")
+    try {
+        const response = await axios.patch(`https://kudiii.herokuapp.com/auth/user/${userId}`, user, {
+            headers: {
+                "token": `Bearer ${generate}`,
+                "Content-Type": "application/json; charset=utf-8",
+            }
+        })
+        toast.success('account successfully updated')
+        return await response.data
+    } catch (err) {
+        toast.error(err.response.data)
+    }
+})
 
 
 export const userSlice = createSlice({
@@ -53,22 +58,20 @@ export const userSlice = createSlice({
         [LoginUser.rejected]: (state) => {
             state.pending = false;
             state.error = true;
+        },
+        [UpdateUser.pending]: (state) => {
+            state.pending = true;
+            state.error = false;
+        },
+        [UpdateUser.fulfilled]: (state, action) => {
+            state.pending = false;
+            state.userInfo = action.payload;
+        },
+        [UpdateUser.rejected]: (state, action) => {
+            state.pending = false;
+            state.error = action.error.message;
         }
     },
-    // extraReducers: {
-    //     [UpdateUser.pending]: (state) => {
-    //         state.pending = true;
-    //         state.error = false;
-    //     },
-    //     [UpdateUser.fulfilled]: (state, action) => {
-    //         state.pending = false;
-    //         state.userInfo = action.payload;
-    //     },
-    //     [UpdateUser.rejected]: (state) => {
-    //         state.pending = false;
-    //         state.error = true;
-    //     }
-    // }
 })
 
 export const { LogoutCall } = userSlice.actions
