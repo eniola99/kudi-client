@@ -32,6 +32,7 @@ import * as Yup from 'yup'
 import '../form.css'
 
 const Trade = () => {
+    const [cP, setCP ] = useState([])
     const [ balance, setBalance ] = useState('')
     const [ tx, setTx ] = useState('')
     const [ txId, setTxId ] = useState([])
@@ -49,13 +50,16 @@ const Trade = () => {
 
     const formik = useFormik({
         initialValues: {
-            Address: "", Network: "BTC", Amount: ""
+            wallet: "", Network: "BTC", amount: ""
         },
         validationSchema: Yup.object({
 
         }),
         onSubmit: async (values) => {
-           console.log(values)
+        //    console.log(values)
+           await axios.post(`http://localhost:8800/auth/user/send/${user.info._id}`, values)
+           .then((res) => console.log(res.data))
+           .catch((error) => console.log(error))
         }
     })
 
@@ -71,6 +75,10 @@ const Trade = () => {
         } 
     }
 
+    const priceHandler = async() => {
+        const response = await axios.get('https://blockchain.info/ticker')
+        setCP(response.data.USD.last)
+    }
     const walletTransaction = async() => {
             const response = await axios.get(`https://sochain.com/api/v2/get_tx_spent/BTC/${add}`)
             setTxId(response.data.data.txs)
@@ -79,6 +87,7 @@ const Trade = () => {
     useEffect(() => {
         walletBalance()
         walletTransaction()
+        priceHandler()
     }, [])
 
     const checkPin = () => {
@@ -133,6 +142,7 @@ const Trade = () => {
                     <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} >{balance} btc</Typography>
 
                     {/* BUTTON FOR RECIEVE AND WITHDRAW */}
+
                     <Stack spacing={4} direction="row" sx={{marginTop: "50px"}}>
                         <CopyToClipboard text={user.info.wallet_publicAddress} 
                             onCopy={() => toast.success('wallet address copied')}>
@@ -153,19 +163,21 @@ const Trade = () => {
                             <form onSubmit={formik.handleSubmit} className='form-style'>
 
                                 <label htmlFor='Address'>Address</label>
-                                <input type='text' name='Address' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Address} />
-                                {formik.touched.Address && formik.errors.Address ? (<div className='required'>{formik.errors.Address}</div>) : null}
+                                <input type='text' name='wallet' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.wallet} />
+                                {formik.touched.wallet && formik.errors.wallet ? (<div className='required'>{formik.errors.wallet}</div>) : null}
 
                                 <label htmlFor='Network'>Network</label>
                                 <input type='text' name='Network' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Network} />
                                 {formik.touched.Network && formik.errors.Network ? (<div className='required'>{formik.errors.Network}</div>) : null}
 
                                 <label htmlFor='Amount'>Amount</label>
-                                <input type='number' name='Amount' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.Amount} />
-                                {formik.touched.Amount && formik.errors.Amount ? (<div className='required'>{formik.errors.Amount}</div>) : null}
-
+                                <input type='number' name='amount' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.amount} />
+                                {formik.touched.amount && formik.errors.amount ? (<div className='required'>{formik.errors.amount}</div>) : null}
+                                <Typography component='div' variant='subtitle2' sx={{marginTop: '5px'}}><strong>${Math.round(formik.values.amount * cP)}</strong></Typography>
+                                
                                 <div className='form-delete'>
-                                <button type='submit'><strong>WITHDRAW</strong></button>
+                                {user.info.Pin ? <button type='submit'><strong>WITHDRAW</strong></button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p>finish setting up your account</p></div>}
+                                
                                 </div>
                             </form>
                         </div>
@@ -214,6 +226,10 @@ const Trade = () => {
                     
                 </CardContent>
             </Card>
+
+
+            {/* Trade with active traders section */}
+
             <Card sx={{ minWidth: 375, minHeight: 300 }}>
             <CardContent>
             <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >ACTIVE TRADERS</Typography>
@@ -225,6 +241,9 @@ const Trade = () => {
             </Typography>
             </CardContent>
             </Card>
+
+            {/* Trade history section */}
+            
             <Card sx={{ minWidth: 375, minHeight: 300 }}>
             <CardContent>
             <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >RECENT TRADE'S</Typography>
