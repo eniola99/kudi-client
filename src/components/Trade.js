@@ -25,6 +25,8 @@ import moment from 'moment'
 import Alert from '@mui/material/Alert';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import CircularProgress from '@mui/material/CircularProgress'
+
 
 
 
@@ -32,6 +34,7 @@ import * as Yup from 'yup'
 import '../form.css'
 
 const Trade = () => {
+    const [ isLoading, setIsLoading ] = useState(false)
     const [cP, setCP ] = useState([])
     const [ balance, setBalance ] = useState('')
     const [ tx, setTx ] = useState('')
@@ -56,10 +59,11 @@ const Trade = () => {
 
         }),
         onSubmit: async (values) => {
-        //    console.log(values)
+            setIsLoading(true)
            await axios.post(`http://localhost:8800/auth/user/send/${user.info._id}`, values)
-           .then((res) => console.log(res.data))
-           .catch((error) => console.log(error))
+           .then((res) => toast.info(res.data))
+           setIsLoading(false)
+            // handleClose()
         }
     })
 
@@ -105,7 +109,7 @@ const Trade = () => {
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 400,
-        height: 500,
+        height: 550,
 
         bgcolor: 'background.paper',
         boxShadow: 24,
@@ -176,7 +180,7 @@ const Trade = () => {
                                 <Typography component='div' variant='subtitle2' sx={{marginTop: '5px'}}><strong>${Math.round(formik.values.amount * cP)}</strong></Typography>
                                 
                                 <div className='form-delete'>
-                                {user.info.Pin ? <button type='submit'><strong>WITHDRAW</strong></button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p>finish setting up your account</p></div>}
+                                {user.info.Pin ? <button type='submit' disabled={isLoading}> {isLoading ? <CircularProgress color="inherit"/> : <strong>WITHDRAW</strong>} </button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p>finish setting up your account</p></div>}
                                 
                                 </div>
                             </form>
