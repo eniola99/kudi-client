@@ -16,7 +16,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses }  from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -26,6 +26,8 @@ import Alert from '@mui/material/Alert';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import CircularProgress from '@mui/material/CircularProgress'
+import { styled } from '@mui/material/styles';
+
 
 
 
@@ -34,6 +36,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import '../form.css'
 
 const Trade = () => {
+    
+    const [ traderList, setTraderList ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false)
     const [cP, setCP ] = useState([])
     const [ balance, setBalance ] = useState('')
@@ -48,6 +52,7 @@ const Trade = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+
     const userPin = user.info.Pin
     const add = user.info.wallet_publicAddress
 
@@ -59,11 +64,18 @@ const Trade = () => {
 
         }),
         onSubmit: async (values) => {
+            // const userId = localStorage.getItem('info')
+            const generate = localStorage.getItem('userToken')
             setIsLoading(true)
-           await axios.post(`http://localhost:8800/auth/user/send/${user.info._id}`, values)
+           await axios.post(`https://kudiii.herokuapp.com/auth/user/send/${user.info._id}`, values, {
+            headers: {
+                "token": `Bearer ${generate}`,
+                "Content-Type": "application/json; charset=utf-8",
+            }
+           })
            .then((res) => toast.info(res.data))
            setIsLoading(false)
-            // handleClose()
+            handleClose()
         }
     })
 
@@ -79,6 +91,22 @@ const Trade = () => {
         } 
     }
 
+    //active traders
+    const activeHandler = async () => {
+        const userId = localStorage.getItem('info')
+        const generate = localStorage.getItem('userToken')
+        setIsLoading(true)
+        const response = await axios.get(`https://kudiii.herokuapp.com/auth/user/active/${userId}`, {
+            headers: {
+                "token": `Bearer ${generate}`,
+                "Content-Type": "application/json; charset=utf-8",
+            }
+        
+        })
+        setIsLoading(false)
+        setTraderList(response.data)
+    }
+
     const priceHandler = async() => {
         const response = await axios.get('https://blockchain.info/ticker')
         setCP(response.data.USD.last)
@@ -92,6 +120,7 @@ const Trade = () => {
         walletBalance()
         walletTransaction()
         priceHandler()
+        activeHandler()
     }, [])
 
     const checkPin = () => {
@@ -131,6 +160,28 @@ const Trade = () => {
      if(decodeToken.exp*1000 < new Date().getTime())
      logout()
 
+     //table style
+
+     const StyledTableCell = styled(TableCell)(({ theme }) => ({
+        [`&.${tableCellClasses.head}`]: {
+          backgroundColor: theme.palette.common.black,
+          color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+          fontSize: 14,
+          fontWeight: "bold"
+        },
+      }))
+
+     const StyledTableRow = styled(TableRow)(({ theme }) => ({
+        '&:nth-of-type(odd)': {
+          backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+        border: 0,
+        },
+      }));
 
     return (
         <>
@@ -143,7 +194,7 @@ const Trade = () => {
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Total Value(BTC):</Typography>
                     <Typography variant="subtitle2" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}>{user.info.wallet_publicAddress} </Typography>
 
-                    <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} >{balance} btc</Typography>
+                    <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} ><strong>${ Number((balance / 100000000) * cP).toFixed(2)}</strong></Typography>
 
                     {/* BUTTON FOR RECIEVE AND WITHDRAW */}
 
@@ -195,9 +246,9 @@ const Trade = () => {
 
                     {/* GET RECENT TRANSACTION HISTORY */}
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >RECENT TRANSACTION:</Typography>
-                    <Typography variant="subtitle2" component="div">This address has transacted {tx} times on Bitcoin blockchain. It has received a total of {totalReceive} BTC. The current value  of this address is {balance} BTC</Typography>
+                    <Typography variant="subtitle2" component="div">This address has transacted {tx} time(s) on Bitcoin blockchain. It has received a total of {totalReceive / 100000000} BTC (<strong>${ Number((totalReceive / 100000000) * cP).toFixed(2)}</strong>). The current value  of this address is {balance / 100000000} BTC (<strong>${ Number((balance / 100000000) * cP).toFixed(2)}</strong>).</Typography>
                     {txId.length < 1 ? 
-                     <Typography variant="h6" component="div" gutterBottom sx={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>NO TRANSACTION ON THIS ADDRESS</Typography> :
+                     <Typography variant="h6" component="div" gutterBottom sx={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>NO RECEIVE TRANSACTION ON THIS ADDRESS</Typography> :
                         <TableContainer component={Paper} sx={{marginTop: '20px'}}>
                             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                 <TableHead>
@@ -233,16 +284,30 @@ const Trade = () => {
 
 
             {/* Trade with active traders section */}
-
-            <Card sx={{ minWidth: 375, minHeight: 300 }}>
+            <Card sx={{ minWidth: 375, minHeight: 100 }}>
             <CardContent>
-            <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >ACTIVE TRADERS</Typography>
-            <Typography variant="subtitle2" component="div" gutterBottom>
-                 Active Traders will appear here with a button to intiate trade
-            </Typography>
-            <Typography variant="caption text" component="div" gutterBottom>
-                coming soon...
-            </Typography>
+            <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Kudi p2p TRADING</Typography>
+            <Typography variant='subtitle2' component='div' gutterBottom><strong>All transactions are monitored and protected by the admin</strong></Typography>
+            { isLoading ? <div style={{display: 'flex', justifyContent: 'center'}}> <CircularProgress /> </div>:
+
+            <Paper sx={{ width: '100%', overflow: 'hidden' }} >
+            <TableContainer sx={{ maxHeight: 220 }}>
+                <Table>
+                <TableHead>
+                </TableHead>
+                    <TableBody>
+                    {traderList.map((list) => (
+                        <StyledTableRow key={list.name}>
+                            <StyledTableCell>{list.name} <br/><p style={{fontSize: "12px", marginTop: "10px"}}>{list.message}</p></StyledTableCell>
+                            <StyledTableCell align='right'>{list.exchangeRate}/$</StyledTableCell>
+                            <StyledTableCell align='right'><Button variant='contained' disabled><strong>Trade</strong></Button> </StyledTableCell>
+                        </StyledTableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            </Paper>
+            }
             </CardContent>
             </Card>
 

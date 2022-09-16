@@ -6,7 +6,7 @@ import {toast} from 'react-toastify'
 
 export const LoginUser = createAsyncThunk("login/user", async (user) => {
     try {
-        const response = await axios.post(`http://localhost:8800/auth/login`, user)   //(`https://kudiii.herokuapp.com/auth/login`, user)
+        const response = await axios.post(`https://kudiii.herokuapp.com/auth/login`, user)
         localStorage.setItem("info", response.data.info._id)
         localStorage.setItem('userToken', response.data.generateToken)
         return response.data
@@ -15,6 +15,7 @@ export const LoginUser = createAsyncThunk("login/user", async (user) => {
     }
 
 })
+
 
 export const UpdateUser = createAsyncThunk("update/user", async (user) => {
     const userId = localStorage.getItem('info')

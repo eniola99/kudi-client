@@ -10,13 +10,16 @@ import {toast} from 'react-toastify'
 import Loader from './Loader'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CircularProgress from '@mui/material/CircularProgress'
+
 
 
 
 
 const Signup = () => {
+    const [ isLoading, setIsLoading ] = useState(false)
     const navigate = useNavigate()
-    const [ loading, setLoading ] = useState(false)
+    // const [ loading, setLoading ] = useState(false)
     const [values, setValues] = useState(false);
 
 
@@ -32,14 +35,11 @@ const Signup = () => {
         }),
 
         onSubmit: async (values) => {
-            try {
-                await axios.post(`https://kudiii.herokuapp.com/auth/register`, values)
-                setLoading(true)
+            setIsLoading(true)
+                await axios.post(`http://localhost:8800/auth/register`, values) //(`https://kudiii.herokuapp.com/auth/register`, values)
                 navigate("/success")
-            } catch (err) {
-                toast.error(err.response.data)
-                setLoading(false)
-             }
+                .then((res) => toast.info(res.data))
+            setIsLoading(false)
         }
     })
     const handleShowPassword = () => {
@@ -74,15 +74,11 @@ const Signup = () => {
                 }                
                 </div>
                 {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
-
-                { loading ? (< Loader />) : 
-                (
-                    <>
-                        <button type='submit' >Register</button>
-                        <h2><Link to='/login'>Already have an account</Link></h2>
-                    </>
-                )
-                }
+                
+                <div className='form-delete'>
+                <button type='submit' disabled={isLoading} >{isLoading ? <CircularProgress/> : <strong>Register</strong>}</button>
+                <h2><Link to='/login'>Already have an account</Link></h2>
+                </div>
             </form>
         </div>
         
