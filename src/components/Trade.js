@@ -39,6 +39,7 @@ const Trade = () => {
     
     const [ traderList, setTraderList ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ isLoading2, setIsLoading2 ] = useState(false)
     const [cP, setCP ] = useState([])
     const [ balance, setBalance ] = useState('')
     const [ tx, setTx ] = useState('')
@@ -61,12 +62,12 @@ const Trade = () => {
             wallet: "", Network: "BTC", amount: ""
         },
         validationSchema: Yup.object({
-
+            wallet: Yup.string().required('required')
         }),
         onSubmit: async (values) => {
             // const userId = localStorage.getItem('info')
             const generate = localStorage.getItem('userToken')
-            setIsLoading(true)
+            setIsLoading2(true)
            await axios.post(`https://kudiii.herokuapp.com/auth/user/send/${user.info._id}`, values, {
             headers: {
                 "token": `Bearer ${generate}`,
@@ -74,7 +75,7 @@ const Trade = () => {
             }
            })
            .then((res) => toast.info(res.data))
-           setIsLoading(false)
+           setIsLoading2(false)
             handleClose()
         }
     })
@@ -183,6 +184,9 @@ const Trade = () => {
         },
       }));
 
+      const displayAmount = (formik.values.amount * cP).toFixed(2)
+      const gasFee = (((((formik.values.amount * 100000000) + 4460) / 100000000) * cP) - displayAmount).toFixed(2)
+
     return (
         <>
         <div >
@@ -194,7 +198,7 @@ const Trade = () => {
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Total Value(BTC):</Typography>
                     <Typography variant="subtitle2" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}>{user.info.wallet_publicAddress} </Typography>
 
-                    <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} ><strong>${ Number((balance / 100000000) * cP).toFixed(2)}</strong></Typography>
+                    <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} ><strong>${ Number((balance / 100000000) * cP).toFixed(2) }</strong></Typography>
 
                     {/* BUTTON FOR RECIEVE AND WITHDRAW */}
 
@@ -228,10 +232,14 @@ const Trade = () => {
                                 <label htmlFor='Amount'>Amount</label>
                                 <input type='number' name='amount' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.amount} />
                                 {formik.touched.amount && formik.errors.amount ? (<div className='required'>{formik.errors.amount}</div>) : null}
-                                <Typography component='div' variant='subtitle2' sx={{marginTop: '5px'}}><strong>${Math.round(formik.values.amount * cP)}</strong></Typography>
+
+                                <div style={{marginTop: '10px', display: 'flex', justifyContent: 'space-between'}}>
+                                <Typography component='div' variant='subtitle2' ><strong>${displayAmount}</strong></Typography>
+                                <Typography component='div' variant='subtitle2' ><strong>~gas ${gasFee}</strong> </Typography>
+                                </div>
                                 
                                 <div className='form-delete'>
-                                {user.info.Pin ? <button type='submit' disabled={isLoading}> {isLoading ? <CircularProgress color="inherit"/> : <strong>WITHDRAW</strong>} </button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p>finish setting up your account</p></div>}
+                                {user.info.Pin ? <button type='submit' disabled={isLoading}> {isLoading2 ? <CircularProgress color="inherit"/> : <strong>WITHDRAW</strong>} </button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p>finish setting up your account</p></div>}
                                 
                                 </div>
                             </form>
