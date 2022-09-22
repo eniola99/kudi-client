@@ -186,6 +186,7 @@ const Trade = () => {
 
       const displayAmount = (formik.values.amount * cP).toFixed(2)
       const gasFee = (((((formik.values.amount * 100000000) + 4460) / 100000000) * cP) - displayAmount).toFixed(2)
+      const walletB = Number((balance / 100000000) * cP).toFixed(2)
 
     return (
         <>
@@ -198,7 +199,7 @@ const Trade = () => {
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Total Value(BTC):</Typography>
                     <Typography variant="subtitle2" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}>{user.info.wallet_publicAddress} </Typography>
 
-                    <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} ><strong>${ Number((balance / 100000000) * cP).toFixed(2) }</strong></Typography>
+                    <Typography variant="subtitle2" component="div" gutterBottom sx={{textDecoration: "underline"}} ><strong>${ walletB }</strong></Typography>
 
                     {/* BUTTON FOR RECIEVE AND WITHDRAW */}
 
@@ -256,7 +257,7 @@ const Trade = () => {
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >RECENT TRANSACTION:</Typography>
                     <Typography variant="subtitle2" component="div">This address has transacted {tx} time(s) on Bitcoin blockchain. It has received a total of {totalReceive / 100000000} BTC (<strong>${ Number((totalReceive / 100000000) * cP).toFixed(2)}</strong>). The current value  of this address is {balance / 100000000} BTC (<strong>${ Number((balance / 100000000) * cP).toFixed(2)}</strong>).</Typography>
                     {txId.length < 1 ? 
-                     <Typography variant="h6" component="div" gutterBottom sx={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>NO RECEIVE TRANSACTION ON THIS ADDRESS</Typography> :
+                     <Typography variant="h6" component="div" gutterBottom sx={{display: 'flex', justifyContent: 'center', marginTop: '30px'}}>NO TRANSACTION ON THIS ADDRESS</Typography> :
                         <TableContainer component={Paper} sx={{marginTop: '20px'}}>
                             <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                                 <TableHead>
@@ -278,7 +279,7 @@ const Trade = () => {
                                     </a>
                                     </TableCell>
                                     <TableCell>{row.confirmations}</TableCell>
-                                    <TableCell>${Math.floor((row.value * 0.0002331) * 100000000)}</TableCell>
+                                    <TableCell>${(row.value * cP).toFixed(2)}</TableCell>
                                     <TableCell align="left">{ moment(row.time * 1000).format("DD MMM hh:mm a")}</TableCell>
                                     </TableRow>
                                 ))}
@@ -292,7 +293,7 @@ const Trade = () => {
 
 
             {/* Trade with active traders section */}
-            <Card sx={{ minWidth: 375, minHeight: 100 }}>
+            <Card sx={{ minWidth: 375, minHeight: 300 }}>
             <CardContent>
             <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Kudi p2p TRADING</Typography>
             <Typography variant='subtitle2' component='div' gutterBottom><strong>All transactions are monitored and protected by the admin</strong></Typography>
