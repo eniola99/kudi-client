@@ -6,7 +6,7 @@ import {toast} from 'react-toastify'
 
 export const LoginUser = createAsyncThunk("login/user", async (user) => {
     try {
-        const response = await axios.post(`https://kudiii.herokuapp.com/auth/login`, user)
+        const response = await axios.post(`${process.env.REACT_APP_LOGIN}`, user)
         localStorage.setItem("info", response.data.info._id)
         localStorage.setItem('userToken', response.data.generateToken)
         return response.data
@@ -21,7 +21,7 @@ export const UpdateUser = createAsyncThunk("update/user", async (user) => {
     const userId = localStorage.getItem('info')
     const generate = localStorage.getItem("userToken")
     try {
-        const response = await axios.patch(`https://kudiii.herokuapp.com/auth/user/${userId}`, user, {
+        const response = await axios.patch(`${process.env.REACT_APP_PATCH}/${userId}`, user, {
             headers: {
                 "token": `Bearer ${generate}`,
                 "Content-Type": "application/json; charset=utf-8",

@@ -7,7 +7,6 @@ import * as Yup from 'yup'
 import '../form.css'
 import { useNavigate } from 'react-router-dom'
 import {toast} from 'react-toastify'
-import Loader from './Loader'
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CircularProgress from '@mui/material/CircularProgress'
@@ -19,7 +18,6 @@ import CircularProgress from '@mui/material/CircularProgress'
 const Signup = () => {
     const [ isLoading, setIsLoading ] = useState(false)
     const navigate = useNavigate()
-    // const [ loading, setLoading ] = useState(false)
     const [values, setValues] = useState(false);
 
 
@@ -36,7 +34,7 @@ const Signup = () => {
 
         onSubmit: async (values) => {
             setIsLoading(true)
-                await axios.post(`http://localhost:8800/auth/register`, values) //(`https://kudiii.herokuapp.com/auth/register`, values)
+                await axios.post(`${process.env.REACT_APP_SIGNUP}`, values)
                 navigate("/success")
                 .then((res) => toast.info(res.data))
             setIsLoading(false)

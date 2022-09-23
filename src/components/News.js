@@ -6,7 +6,7 @@ import { useGetCryptosQuery } from '../services/cryptoApi';
 import { useGetCryptoNewsQuery } from '../services/cryptoNews';
 import Loader from './Loader';
 
-const demoImage = 'https://www.bing.com/th?id=OVFT.mpzuVZnv8dwIMRfQGPbOPC&pid=News';
+const demoImage = `${process.env.REACT_APP_DEMOIMAGE}`;
 
 const { Text, Title } = Typography;
 const { Option } = Select;

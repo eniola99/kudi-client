@@ -26,10 +26,7 @@ import Alert from '@mui/material/Alert';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import CircularProgress from '@mui/material/CircularProgress'
-import { styled } from '@mui/material/styles';
-
-
-
+import { styled } from '@mui/material/styles'
 
 
 //css
@@ -65,10 +62,9 @@ const Trade = () => {
             wallet: Yup.string().required('required')
         }),
         onSubmit: async (values) => {
-            // const userId = localStorage.getItem('info')
             const generate = localStorage.getItem('userToken')
             setIsLoading2(true)
-           await axios.post(`https://kudiii.herokuapp.com/auth/user/send/${user.info._id}`, values, {
+           await axios.post(`${process.env.REACT_APP_TESTING}/${user.info._id}`, values, {
             headers: {
                 "token": `Bearer ${generate}`,
                 "Content-Type": "application/json; charset=utf-8",
@@ -83,7 +79,7 @@ const Trade = () => {
 
     const walletBalance = async() => {
         try {
-            const response = await axios.get(`https://blockchain.info/balance?active=${user.info.wallet_publicAddress}`)
+            const response = await axios.get(`${process.env.REACT_APP_WALLET_BALANCE}=${user.info.wallet_publicAddress}`)
             setBalance(response.data[add].final_balance)
             setTx(response.data[add].n_tx)
             setTotalReceive(response.data[add].total_received)
@@ -97,7 +93,7 @@ const Trade = () => {
         const userId = localStorage.getItem('info')
         const generate = localStorage.getItem('userToken')
         setIsLoading(true)
-        const response = await axios.get(`https://kudiii.herokuapp.com/auth/user/active/${userId}`, {
+        const response = await axios.get(`${process.env.REACT_APP_ACTIVE_HANDLER}/${userId}`, {
             headers: {
                 "token": `Bearer ${generate}`,
                 "Content-Type": "application/json; charset=utf-8",
@@ -109,11 +105,11 @@ const Trade = () => {
     }
 
     const priceHandler = async() => {
-        const response = await axios.get('https://blockchain.info/ticker')
+        const response = await axios.get(`${process.env.REACT_APP_PRICE_HANDLER}`)
         setCP(response.data.USD.last)
     }
     const walletTransaction = async() => {
-            const response = await axios.get(`https://sochain.com/api/v2/get_tx_spent/BTC/${add}`)
+            const response = await axios.get(`${process.env.REACT_APP_WALLET_TRANSACTION}/${add}`)
             setTxId(response.data.data.txs)
         }
 
@@ -274,7 +270,7 @@ const Trade = () => {
                                     key={row.txid}
                                     >
                                     <TableCell component="th" scope="row">
-                                    <a href={`https://www.blockchain.com/btc/tx/${row.txid}`} target="_blank" rel="noreferrer">
+                                    <a href={`${process.env.REACT_APP_TRX_INFO}/${row.txid}`} target="_blank" rel="noreferrer">
                                         {row.txid.slice(0,30)}
                                     </a>
                                     </TableCell>
