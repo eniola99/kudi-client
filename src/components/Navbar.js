@@ -41,7 +41,7 @@ const Navbar = () => {
                 <button className='menu-control-container' onClick={() => setActiveMenu(!activeMenu)}> <MenuOutlined /> </button>
             </div>
             {activeMenu && (
-                < Menu theme='dark' onClick={() => setActiveMenu(!activeMenu)} >
+                < Menu theme='dark' >
                 <Menu.Item key='1' icon={< HomeOutlined />}>
                 <Link to="/">Home</Link>
                 </Menu.Item>
