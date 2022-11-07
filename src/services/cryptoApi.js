@@ -7,7 +7,7 @@ const cryptoApiHeaders = {
 }
 
 const baseUrl = `${process.env.REACT_APP_API_URL}`
-
+const timeperiod = '7d'
 const createRequest = (url) => ({ url, headers: cryptoApiHeaders })
 
 export const cryptoApi = createApi({
@@ -21,7 +21,7 @@ export const cryptoApi = createApi({
             query: (coinId) => createRequest(`/coin/${coinId}`),
           }),
         getCryptoHistory: builder.query({
-            query: ({ coinId, timeperiod }) => createRequest(`coin/${coinId}/history?timeperiod=${timeperiod}`),
+            query: ({ coinId }) => createRequest(`coin/${coinId}/history?timePeriod=${timeperiod}`),
           }),
     })
 })

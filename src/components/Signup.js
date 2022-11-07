@@ -46,7 +46,7 @@ const Signup = () => {
 
     return (
         <>
-        <div className='container'>
+        <div className='container' style={{height: '82vh'}}>
             <Typography.Title level={3} style={{textAlign: 'center', padding: 30, margin: 20}}>kudiCrypto Family</Typography.Title>
             <form onSubmit={formik.handleSubmit} className='form-style'>
                 <label htmlFor='firstName'>First Name</label>

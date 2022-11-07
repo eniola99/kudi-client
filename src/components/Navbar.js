@@ -24,10 +24,12 @@ const Navbar = () => {
     useEffect(() => {
         if(screenSize < 768) {
             setActiveMenu(false)
-        }else {
+        }
+        else {
             setActiveMenu(true)
         }
     }, [screenSize])
+
 
     return (
         <div className='nav-container'>
@@ -36,12 +38,10 @@ const Navbar = () => {
                 <Typography.Title level={5} className='logo'> 
                 <Link to="/" style={{color: 'white'}}>kudiCrypto</Link>
                 </Typography.Title>
-                <button className='menu-control-container' onClick={() => setActiveMenu(!activeMenu)}>
-                <MenuOutlined />
-                </button>
+                <button className='menu-control-container' onClick={() => setActiveMenu(!activeMenu)}> <MenuOutlined /> </button>
             </div>
             {activeMenu && (
-                < Menu theme='dark' >
+                < Menu theme='dark' onClick={() => setActiveMenu(!activeMenu)} >
                 <Menu.Item key='1' icon={< HomeOutlined />}>
                 <Link to="/">Home</Link>
                 </Menu.Item>

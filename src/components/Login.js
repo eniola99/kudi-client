@@ -39,7 +39,7 @@ const Login = () => {
 
     return (
         <>
-          <div className='container' style={{height: '80vh'}}>
+          <div className='container' style={{height: '83vh'}}>
         <Typography.Title level={3} style={{textAlign: 'center', padding: 30, margin: 20}}>Welcome Back Mate!!!</Typography.Title>
         <form className='form-style' onSubmit={formik.handleSubmit}>
             <label htmlFor='email'>Email</label>
@@ -58,7 +58,9 @@ const Login = () => {
             </div>
             {formik.touched.password && formik.errors.password ? (<div className='required'>{formik.errors.password}</div>) : null}
 
+            <div className='form-delete'>
             <button type='submit'>Login</button>
+            </div>
 
         </form>
         </div>
