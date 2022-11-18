@@ -27,12 +27,17 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import CircularProgress from '@mui/material/CircularProgress'
 import { styled } from '@mui/material/styles'
+import io from 'socket.io-client'
+
 
 
 //css
 import '../form.css'
 
 const Trade = () => {
+
+  const socket = io.connect('http://localhost:4000')
+
     
     const [ traderList, setTraderList ] = useState([])
     const [ isLoading, setIsLoading ] = useState(false)
@@ -236,7 +241,7 @@ const Trade = () => {
                                 </div>
                                 
                                 <div className='form-delete'>
-                                {user.info.Pin ? <button type='submit' disabled={isLoading}> {isLoading2 ? <CircularProgress color="inherit"/> : <strong>WITHDRAW</strong>} </button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p>finish setting up your account</p></div>}
+                                {user.info.Pin ? <button type='submit' disabled={isLoading}> {isLoading2 ? <CircularProgress color="inherit"/> : <strong>WITHDRAW</strong>} </button> :<div><Button disabled variant='contained' color='error'>WITHDRAW </Button><p style={{color: 'red'}}>finish setting up your account.</p></div>}
                                 
                                 </div>
                             </form>
@@ -292,9 +297,9 @@ const Trade = () => {
             <Card sx={{ minWidth: 375, minHeight: 300 }}>
             <CardContent>
             <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Kudi p2p TRADING</Typography>
+            {!user.info.Pin ? <p> do this</p> : 
             <Typography variant='subtitle2' component='div' gutterBottom><strong>All transactions are monitored and protected by the admin</strong></Typography>
-            { isLoading ? <div style={{display: 'flex', justifyContent: 'center'}}> <CircularProgress /> </div>:
-
+            && isLoading ? <div style={{display: 'flex', justifyContent: 'center'}}> <CircularProgress /> </div>:
             <Paper sx={{ width: '100%', overflow: 'hidden' }} >
             <TableContainer sx={{ maxHeight: 220 }}>
                 <Table>
@@ -311,8 +316,8 @@ const Trade = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            </Paper>
-            }
+            </Paper>}
+            
             </CardContent>
             </Card>
 

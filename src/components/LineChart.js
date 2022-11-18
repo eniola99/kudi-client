@@ -23,6 +23,7 @@ const myChart = ({ coinHistory, currentPrice, coinName}) => {
   for (let i = 0; i < coinHistory?.data?.history?.length; i += 1) {
     coinTimestamp.push(moment(coinHistory?.data?.history[i].timestamp * 1000).format("DD MMM hh a"));
   }
+  coinPrice.reverse()
   coinTimestamp.reverse()
 
   const data = {

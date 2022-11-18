@@ -17,11 +17,11 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verified from './components/Verified';
 import { useSelector } from "react-redux";
+import P2pChat from './components/P2pChat';
 
 
 function App() {
   const user = useSelector((state) => state.user.userInfo)
-
 
 return (
     <>
@@ -46,6 +46,7 @@ return (
             < Route exact path="/success" element={< Success />}></Route>
             < Route exact path="/settings" element={user ? < Settings /> : <Homepage />}></Route>
             < Route exact path="/verified" element={< Verified />}></Route>
+            < Route exact path='/chat' element={user ? <P2pChat/> : <Homepage/>}></Route>
           </ Routes>
         </div>
       </Layout>  
