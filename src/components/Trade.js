@@ -194,7 +194,7 @@ const Trade = () => {
         <div >
         {!user.info.Pin ? <Alert severity='error'> Update your account status to be able to use the service</Alert> : null}
          <Typography variant="h6" component="div" gutterBottom sx={{color: "#072A6C", marginBottom: "40px", marginTop: '20px'}}> Hi, {user.info.firstName} </Typography>
-         <Masonry columns={2} spacing={4}>
+         <Masonry columns={2} spacing={4} style={{ height: '80vh'}}>
             <Card sx={{ minWidth: 375 }}>
                 <CardContent>
                     <Typography variant="h5" component="div" gutterBottom sx={{color: "#072A6C", marginTop: '10px'}} >Total Value(BTC):</Typography>

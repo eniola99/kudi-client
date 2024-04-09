@@ -4,7 +4,7 @@ import {toast} from 'react-toastify'
 
 
 
-export const LoginUser = createAsyncThunk("login/user", async (user) => {
+export const LoginUser = createAsyncThunk(`login/user`, async (user) => {
     try {
         const response = await axios.post(`${process.env.REACT_APP_LOGIN}`, user)
         localStorage.setItem("info", response.data.info._id)

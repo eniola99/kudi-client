@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useGetCryptosQuery } from '../services/cryptoApi'
 import { Typography,  Row, Col, Card, Input} from 'antd';
-import millify from "millify";
+import millify from 'millify';
 import { Link } from 'react-router-dom';
 import Loader from './Loader';
 

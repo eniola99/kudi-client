@@ -34,7 +34,7 @@ const Navbar = () => {
     return (
         <div className='nav-container'>
             <div className='logo-container'>
-                <Avatar src={icon} size='large' />
+                <Avatar shape="square" size={32} src={icon} />
                 <Typography.Title level={5} className='logo'> 
                 <Link to="/" style={{color: 'white'}}>kudiCrypto</Link>
                 </Typography.Title>
